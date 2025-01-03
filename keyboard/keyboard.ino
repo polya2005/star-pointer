@@ -31,7 +31,8 @@ byte b = 0;
 void loop() {
   // put your main code here, to run repeatedly:
   for (auto r = 0; r < 5; ++r) {
-    digitalWrite(outPin[r], HIGH);
+    // digitalWrite(outPin[r], HIGH); //old circuit
+    digitalWrite(outPin[r], LOW); //new circuit
     for (auto c = 0; c < 11; ++c) {
       if (digitalRead(inPin[c]) == LOW) {
         b = kbChar[r][c];
@@ -44,6 +45,7 @@ void loop() {
         }
       }
     }
-    digitalWrite(outPin[r], LOW);
+    // digitalWrite(outPin[r], LOW); //old circuit
+    digitalWrite(outPin[r], HIGH); //new circuit
   }
 }
