@@ -111,7 +111,7 @@ void setup() {
 void loop() {
   drawMainScr();
   while (!touch.scan(0))
-    ;
+    ; // wait for touch
   uint16_t x{ touch.x }, y{ touch.y };
   uint32_t prev{ millis() };
   if (x > SCREEN_W || y > SCREEN_H) {
@@ -235,6 +235,7 @@ void showCoor() {
     ;  //wait until the screen is unpressed
   uint32_t prev{ millis() };
   u8g2.setForegroundColor(WHITE);
+  char _disp[7];
   while (!touch.scan(0)) {
     if (millis() - prev < 250) {  //if .1 second has not passed
       az += starptr._getAz();
@@ -248,8 +249,8 @@ void showCoor() {
       prev = millis();
       tft.fillRect(CEN_X, 110, 60, 20, BLACK);
       tft.fillRect(CEN_X, 135, 60, 20, BLACK);
-      printText(CEN_X, 130, String(degrees(az / count), 2));
-      printText(CEN_X, 155, String(degrees(al / count), 2));
+      printText(CEN_X, 130, dtostrf(degrees(az / count), 6, 2, _disp));
+      printText(CEN_X, 155, dtostrf(degrees(al / count), 5, 2, _disp));
       al = 0;
       az = 0;
       count = 0;
@@ -352,9 +353,11 @@ void identify() {
             case 7:
             case 8:
               debugln("OK");
+
               tft.fillScreen(BLACK);
               formatText(RED, BLACK, SIZE2);
               printText(90, 130, F("Calculating..."));
+
               LinkedList<int16_t> indices;
               starptr.readAzAl();
               HMS ra{ starptr.rightAscension() };
